@@ -1,5 +1,6 @@
 // app/trabajo/[id]/page.js
 import Link from 'next/link';
+import Image from 'next/image'
 
 // Simulated database of job listings
 // Expanded jobDatabase with 5 job listings
@@ -175,8 +176,8 @@ export default function JobDetailsPage({ params }) {
     <div className="min-h-screen bg-white text-black">
       <div className="container mx-auto px-4 py-8">
         <header className="flex justify-between items-center mb-8">
-          <div className="logo text-2xl font-bold">
-            <Link href="/">TechWork Remote</Link>
+        <div className="logo text-2xl font-bold">
+            <Link className="text-green-600" href="/">TechWork Remote</Link>
           </div>
           <nav>
             <Link href="/quiero-trabajar" className="text-green-600 hover:text-green-800">
@@ -225,6 +226,21 @@ export default function JobDetailsPage({ params }) {
             </div>
           </div>
         </main>
+        <footer className="mt-16 text-center">
+          <h2 className="text-2xl font-bold mb-4, text-green-600">Proyecto V</h2>
+          <h3 className="text-xl font-semibold mb-2, text-green-600">Alumnos:</h3>
+          <p className="mb-1">Erika Nathaly Pacheco Espíndola</p>
+          <p className="mb-1">Angel Francisco Sánchez De Tagle Márquez</p>
+          <p className="mb-4">Ramiro Cesar Vargas Cárdenas</p>
+          <div className="flex justify-center">
+            <Image 
+              src="/udg-virtual-logo.png" 
+              alt="UDG Virtual Logo" 
+              width={150} 
+              height={150}
+            />
+          </div>
+        </footer>
       </div>
     </div>
   );

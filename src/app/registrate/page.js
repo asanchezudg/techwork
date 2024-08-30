@@ -6,8 +6,8 @@ export default function Register() {
     <div className="min-h-screen bg-white text-black">
       <div className="container mx-auto px-4">
         <header className="flex justify-between items-center py-4">
-          <div className="logo text-2xl font-bold">
-            <Link href="/">TechWork Remote</Link>
+        <div className="logo text-2xl font-bold">
+            <Link className="text-green-600" href="/">TechWork Remote</Link>
           </div>
           <nav>
             <ul className="flex space-x-4">
