@@ -1,7 +1,8 @@
 import { AuthProvider } from './context/AuthContext';
 import Navigation from './components/Navigation';
 import Link from 'next/link';
-import './globals.css'; // Asegúrate de que este archivo exista con tus estilos globales
+import './globals.css';
+import Image from 'next/image';  // Asegúrate de que este archivo exista con tus estilos globales
 
 export default function RootLayout({ children }) {
   return (
@@ -11,9 +12,12 @@ export default function RootLayout({ children }) {
           <div className="min-h-screen bg-white text-black">
             <div className="container mx-auto px-4">
               <header className="flex justify-between items-center py-4">
-                <div className="logo text-2xl font-bold">
-                  <Link href="/" className="text-green-600">TechWork Remote</Link>
-                </div>
+              <div className="logo text-2xl font-bold">
+                <Link href="/">
+                  {/* Asegúrate de ajustar el 'src' a la ruta de tu imagen y 'alt' para accesibilidad */}
+                  <Image src="/tw_logo.jpg" alt="TechWork Remote Logo" width={100} height={50} className="text-green-600" />
+                </Link>
+              </div>
                 <Navigation />
               </header>
               <main className="mt-8">

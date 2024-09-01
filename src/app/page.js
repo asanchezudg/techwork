@@ -3,11 +3,9 @@ import Image from 'next/image'
 
 export default function Register() {
   return (
-    <div className="min-h-screen bg-white text-black">
+    <div className="bg-white text-black">
       <div className="container mx-auto px-4">
-
-
-        <main className="mt-8">
+       <main className="mt-8">
           <section className="text-center mb-12">
             <h1 className="text-4xl font-bold mb-4">
               Impulsa tu negocio con el <br />
@@ -23,27 +21,32 @@ export default function Register() {
           </section>
 
           <div className="flex justify-around mb-12">
-            {/* Placeholder for circular images */}
-            {[...Array(8)].map((_, i) => (
-              <div key={i} className="w-16 h-16 bg-gray-200 rounded-full"></div>
+            {[...Array(7)].map((_, i) => (
+              <div key={i} className="w-40 h-40 rounded-full overflow-hidden">
+                <Image
+                  src={`/${i + 1}.png`} 
+                  alt={`Imagen ${i + 1}`}
+                  width={1000} 
+                  height={1000}
+                  className="object-cover"
+                />
+              </div>
             ))}
           </div>
 
           <div className="grid grid-cols-2 gap-8">
             <div className="border p-6 rounded-lg">
               <div className="w-12 h-12 bg-green-200 rounded-full mb-4"></div>
-              <h2 className="text-2xl font-bold mt-4 mb-2">DEVELOPERS</h2>
-              <p>Contrata talento pre-seleccionado y certificado para trabajar en las tecnologías que tu negocio necesita por un tiempo determinado.</p>
+              <h2 className="text-2xl font-bold mt-4 mb-2">FREELANCERS</h2>
+              <p>Contrata talento de distintas disciplinas para trabajar por objetivos u horas, recibiendo múltiples propuestas y acordando un precio.</p>
             </div>
             <div className="border p-6 rounded-lg">
-              <div className="w-12 h-12 bg-green-200 rounded-full mb-4"></div>
-              <h2 className="text-2xl font-bold mt-4 mb-2">FREELANCERS</h2>
+              <div className="w-12 h-12 bg-green-200 rounded-full mb-50"></div>
+              <h2 className="text-2xl font-bold mt-4 mb-2">JUNIORS</h2>
               <p>Contrata talento de distintas disciplinas para trabajar por objetivos u horas, recibiendo múltiples propuestas y acordando un precio.</p>
             </div>
           </div>
         </main>
-
-
       </div>
     </div>
   )

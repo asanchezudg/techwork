@@ -1,4 +1,5 @@
 const countries = [
+    { code: '--', name: '------' },
     { code: 'MX', name: 'México' },
     { code: 'US', name: 'Estados Unidos' },
     { code: 'CA', name: 'Canadá' },

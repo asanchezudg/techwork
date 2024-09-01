@@ -61,7 +61,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-black">
+    <div className="bg-white text-black">
       <div className="container mx-auto px-4">
         <main className="mt-8">
           <div className="max-w-md mx-auto">
