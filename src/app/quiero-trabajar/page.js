@@ -23,19 +23,7 @@ export default function WorkPage() {
   return (
     <div className="min-h-screen bg-white text-black">
       <div className="container mx-auto px-4">
-        <header className="flex justify-between items-center py-4">
-        <div className="logo text-2xl font-bold">
-            <Link className="text-green-600" href="/">TechWork Remote</Link>
-          </div>
-          <nav>
-            <ul className="flex space-x-4">
-              <li><Link href="/quiero-contratar" className="text-gray-600">Quiero contratar</Link></li>
-              <li><Link href="/quiero-trabajar" className="text-green-600 border-b-2 border-green-600">Quiero trabajar</Link></li>
-              <li><Link href="/ingresa" className="text-gray-600">Ingresa</Link></li>
-              <li><Link href="/registrate" className="bg-green-600 text-white px-4 py-2 rounded">Registrate</Link></li>
-            </ul>
-          </nav>
-        </header>
+
 
         <main className="mt-8">
           <h1 className="text-4xl font-bold mb-8 text-center">
@@ -81,21 +69,7 @@ export default function WorkPage() {
             )}
           </div>
         </main>
-        <footer className="mt-16 text-center">
-          <h2 className="text-2xl font-bold mb-4, text-green-600">Proyecto V</h2>
-          <h3 className="text-xl font-semibold mb-2, text-green-600">Alumnos:</h3>
-          <p className="mb-1">Erika Nathaly Pacheco Espíndola</p>
-          <p className="mb-1">Angel Francisco Sánchez De Tagle Márquez</p>
-          <p className="mb-4">Ramiro Cesar Vargas Cárdenas</p>
-          <div className="flex justify-center">
-            <Image 
-              src="/udg-virtual-logo.png" 
-              alt="UDG Virtual Logo" 
-              width={150} 
-              height={150}
-            />
-          </div>
-        </footer>
+        
       </div>
     </div>
   )
