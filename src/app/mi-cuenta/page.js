@@ -4,6 +4,13 @@ import { useAuth } from '../context/AuthContext';
 import countries from '../utils/countries';
 import states from '../utils/states';
 
+// Componente Loader
+const Loader = () => (
+  <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white bg-opacity-75 z-50">
+    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-green-500"></div>
+  </div>
+);
+
 export default function MiCuentaPage() {
   const { user, updateUser } = useAuth();
   const [userData, setUserData] = useState({
@@ -16,14 +23,14 @@ export default function MiCuentaPage() {
     country: '',
     state: '',
   });
-  const [cvUrl, setCVUrl] = useState('');
   const [cv, setCV] = useState(null);
   const [cvName, setCVName] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   useEffect(() => {
-    // Solo ejecutar si existe el usuario
     if (user) {
       const fetchUserData = async () => {
         try {
@@ -32,8 +39,7 @@ export default function MiCuentaPage() {
 
           if (response.ok && data.success) {
             setUserData(data.data);
-            // Mostrar el nombre del archivo CV si existe
-            setCVUrl(data.data.cvUrl || '');
+            setCVName(data.data.cvName || '');
           } else {
             setMessage(data.message || 'Error al cargar los datos del usuario');
           }
@@ -56,13 +62,17 @@ export default function MiCuentaPage() {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setCV(file);
-    setCVName(file ? file.name : ''); // Mostrar el nombre del archivo
+    if (file) {
+      setCV(file);
+      setCVName(file.name);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage('');
+    setIsLoading(true);
+
 
     const formData = new FormData();
     Object.keys(userData).forEach((key) => {
@@ -83,27 +93,31 @@ export default function MiCuentaPage() {
       if (response.ok) {
         setMessage('Perfil actualizado exitosamente');
         updateUser(userData);
+        
+        // Esperar 2 segundos antes de refrescar la página
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       } else {
         setMessage(data.message || 'Error al actualizar el perfil');
       }
     } catch (error) {
       console.error('Error updating profile:', error);
-      setMessage('Perfil actualizado exitosamente.');
+      setMessage('Error al actualizar el perfil. Por favor, inténtalo de nuevo.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   if (loading) {
-    return <p>Cargando...</p>; // Muestra un mensaje de carga mientras los datos están siendo recuperados
+    return <Loader />;
   }
 
   return (
     <div className="container mx-auto px-4">
+      {isLoading && <Loader />}
       <h1 className="text-3xl font-bold mb-6">Mi Cuenta</h1>
-      {message && (
-        <p className={message.includes('exitosamente') ? 'text-green-600' : 'text-red-600'}>
-          {message}
-        </p>
-      )}
+      {message && <p className={message.includes('exitosamente') ? 'text-green-600' : 'text-red-600'}>{message}</p>}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="email" className="block mb-1">
@@ -212,36 +226,27 @@ export default function MiCuentaPage() {
       </select>
     </div>
     <div>
-      <label htmlFor="cv" className="block mb-1">
-        CV (PDF)
-      </label>
-      <input
-        type="file"
-        id="cv"
-        name="cv"
-        accept=".pdf"
-        onChange={handleFileChange}
-        className="w-full p-2 border rounded"
-      />
-      {cvName && <p className="mt-2 text-gray-600">Archivo cargado: {cvName}</p>}
+          <label htmlFor="cv" className="block mb-1">
+            CV (PDF)
+          </label>
+          <input
+            type="file"
+            id="cv"
+            name="cv"
+            accept=".pdf"
+            onChange={handleFileChange}
+            className="w-full p-2 border rounded"
+          />
+          {cvName && <p className="mt-2 text-gray-600">Archivo actual: {cvName}</p>}
+        </div>
+        <button 
+          type="submit" 
+          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition duration-200" 
+          disabled={isLoading}
+        >
+          {isLoading ? 'Guardando...' : 'Guardar Cambios'}
+        </button>
+      </form>
     </div>
-    <div>
-      <label htmlFor="cv" className="block mb-1">
-        CV (PDF Cargado Anteriormente)
-      </label>
-      {cvName ? (
-        <p className="text-gray-600">Archivo cargado: {cvName}</p>
-      ) : (
-        <p>No hay CV cargado anteriormente.</p>
-      )}
-    </div>
-        <button
-      type="submit"
-      className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition duration-200"
-    >
-      Guardar Cambios
-    </button>
-  </form>
-</div>
-);
+  );
 }

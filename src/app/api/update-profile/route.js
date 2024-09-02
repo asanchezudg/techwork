@@ -2,7 +2,7 @@
 
 import { query } from '../../../app/lib/db';
 import { NextResponse } from 'next/server';
-import { writeFile } from 'fs/promises';
+import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 
 export async function POST(request) {
@@ -18,7 +18,9 @@ export async function POST(request) {
     const state = formData.get('state');
     const file = formData.get('cv');
 
-    // Validar que el email esté presente
+    console.log('Received form data:', { email, firstName, lastName, middleName, address, country, state });
+    console.log('File received:', file ? 'Yes' : 'No');
+
     if (!email) {
       return NextResponse.json({ success: false, message: 'El email es requerido' }, { status: 400 });
     }
@@ -31,34 +33,48 @@ export async function POST(request) {
 
     let cvPath = null;
 
-    // Manejar la carga del CV si se proporcionó un archivo
-    if (file && file.size > 0) { // Verificar que el archivo no esté vacío
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
+    if (file && file instanceof Blob) {
+      console.log('File details:', { name: file.name, type: file.type, size: file.size });
 
-      const fileName = `${file.name}`;
-      const filePath = join(process.cwd(), 'src','app','mi-cuenta', 'uploads', fileName);
+      if (file.size > 0) {
+        const bytes = await file.arrayBuffer();
+        const buffer = Buffer.from(bytes);
 
-      // Guardar el archivo en el sistema de archivos
-      await writeFile(filePath, buffer);
-      cvPath = `../../mi-cuenta/uploads/${fileName}`;
+        // Crear un nombre de archivo único
+        const fileName = `${email}_${file.name}`;
+        const uploadsDir = join(process.cwd(), 'public', 'uploads');
+        const filePath = join(uploadsDir, fileName);
 
-      // Verificar si ya existe un CV para este usuario utilizando el email
-      const existingCV = await query('SELECT id FROM UserCVs WHERE email = ?', [email]);
+        // Asegurarse de que el directorio de uploads existe
+        await mkdir(uploadsDir, { recursive: true });
 
-      if (existingCV.length > 0) {
-        // Actualizar el CV existente
-        await query(
-          'UPDATE UserCVs SET file_name = ?, file_path = ? WHERE email = ?',
-          [fileName, cvPath, email]
-        );
+        // Guardar el archivo en el sistema de archivos
+        await writeFile(filePath, buffer);
+        cvPath = `uploads/${fileName}`;
+
+        console.log('File saved at:', cvPath);
+
+        // Verificar si ya existe un CV para este usuario utilizando el email
+        const existingCV = await query('SELECT id FROM UserCVs WHERE email = ?', [email]);
+
+        if (existingCV.length > 0) {
+          // Actualizar el CV existente
+          await query(
+            'UPDATE UserCVs SET file_name = ?, file_path = ? WHERE email = ?',
+            [fileName, cvPath, email]
+          );
+        } else {
+          // Insertar un nuevo CV
+          await query(
+            'INSERT INTO UserCVs (email, file_name, file_path) VALUES (?, ?, ?)',
+            [email, fileName, cvPath]
+          );
+        }
       } else {
-        // Insertar un nuevo CV
-        await query(
-          'INSERT INTO UserCVs (email, file_name, file_path) VALUES (?, ?, ?)',
-          [email, fileName, cvPath]
-        );
+        console.log('File is empty');
       }
+    } else {
+      console.log('No valid file provided');
     }
 
     return NextResponse.json({ 
@@ -69,8 +85,6 @@ export async function POST(request) {
 
   } catch (error) {
     console.error('Error updating profile:', error);
-
-    // Proporcionar un mensaje de error detallado
     return NextResponse.json(
       { success: false, message: 'Error al actualizar el perfil. Detalles del error: ' + error.message },
       { status: 500 }

@@ -24,19 +24,8 @@ export async function GET(request) {
 
     let fileUrl = null;
     if (cvResult.length > 0) {
-      const fileName = cvResult[0].file_name;
-
-      // Intentar construir la URL usando el primer host
-      try {
-        //const host = 'https://techwork-delta.vercel.app';
-        const host = 'http://localhost:3000'; // Host de producción
-        fileUrl = `${host}/mi-cuenta-/uploads/${fileName}`;
-        // Simular acceso al host para verificar si es accesible (esto no es necesario en la mayoría de los casos)
-      } catch (error) {
-        // Si hay un error, usar el host alternativo
-        const fallbackHost = 'http://localhost:3000'; // Host de desarrollo
-        fileUrl = `${fallbackHost}/mi-cuenta/uploads/${fileName}`;
-      }
+      // Supongamos que el archivo está en un directorio accesible públicamente
+      fileUrl = `https://example.com/uploads/${cvResult[0].file_name}`;
     }
 
     return NextResponse.json({
