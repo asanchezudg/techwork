@@ -66,7 +66,13 @@ export default function LoginPage() {
         <main className="mt-8">
           <div className="max-w-md mx-auto">
             <h1 className="text-3xl font-bold mb-6 text-center">Iniciar Sesión</h1>
-            {message && <p className={message.includes('exitoso') ? 'text-green-600' : 'text-red-600'} >{message}</p>}
+            {message && (
+              <div className="text-center mb-4">
+                <p className={`${message.includes('exitoso') ? 'text-green-600' : 'text-red-600'} font-semibold`}>
+                  {message}
+                </p>
+              </div>
+            )}
             {isLoading ? (
               <Loader />
             ) : (

@@ -16,8 +16,8 @@ export default function Register() {
               Desarrolla tu negocio de manera rápida y segura.<br />
               Te conectamos con miles de talentos en tu idioma y zona horaria
             </p>
-            <button className="bg-green-600 text-white px-6 py-3 rounded-full text-lg">Quiero contratar</button>
-            <Link href="#" className="ml-4 text-green-600">¿Quieres trabajar? →</Link>
+            <Link href="/quiero-contratar" className="bg-green-600 text-white px-6 py-3 rounded-full text-lg">Quiero contratar</Link>
+            <Link href="/quiero-trabajar" className="ml-4 text-green-600">¿Quieres trabajar? →</Link>
           </section>
 
           <div className="flex justify-around mb-12">

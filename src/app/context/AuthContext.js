@@ -1,11 +1,13 @@
 // app/context/AuthContext.js
 'use client';
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -22,6 +24,7 @@ export function AuthProvider({ children }) {
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
+    router.push('/'); // Redirecciona a la página principal
   };
 
   return (

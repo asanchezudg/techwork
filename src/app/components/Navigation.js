@@ -12,8 +12,12 @@ export default function Navigation() {
     setIsClient(true);
   }, []);
 
+  const handleLogout = () => {
+    logout(); // Esta función ahora manejará la redirección
+  };
+
   if (!isClient) {
-    return null; // O un placeholder si prefieres
+    return null; // Evita el problema de hidratación
   }
 
   return (
@@ -25,7 +29,7 @@ export default function Navigation() {
           <>
             <li className="text-gray-600">Hola {user.firstName || user.name}</li>
             <li><Link href="/mi-cuenta" className="bg-green-600 text-white px-4 py-2 rounded">Mi cuenta</Link></li>
-            <li><button onClick={logout} className="text-gray-600">Cerrar sesión</button></li>
+            <li><button onClick={handleLogout} className="text-gray-600">Cerrar sesión</button></li>
           </>
         ) : (
           <>
