@@ -1,24 +1,27 @@
-// app/api/tasks/route.js
-
+// app/api/login/route.js
+import { query } from '../../../app/lib/db';
 import { NextResponse } from 'next/server';
-import { query } from '../../lib/db';
 
-export async function GET() {
-  try {
-    const tasks = await query('SELECT * FROM tasks');
-    return NextResponse.json(tasks);
-  } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-}
+export async function POST(request) {
+  const { email, password } = await request.json();
 
-export async function PUT(request) {
   try {
-    const { id, completed } = await request.json();
-    await query('UPDATE tasks SET completed = ? WHERE id = ?', [completed, id]);
-    const [updatedTask] = await query('SELECT * FROM tasks WHERE id = ?', [id]);
-    return NextResponse.json(updatedTask);
+    const results = await query(
+      'SELECT UserType, FirstName FROM Users WHERE Email = ? AND PasswordHash = ?',
+      [email, password]
+    );
+
+    if (results.length > 0) {
+      return NextResponse.json({ 
+        success: true, 
+        userType: results[0].UserType,
+        name: results[0].FirstName
+      });
+    } else {
+      return NextResponse.json({ success: false, message: 'Credenciales inválidas' }, { status: 401 });
+    }
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error('Error al iniciar sesión:', error);
+    return NextResponse.json({ success: false, message: 'Error al iniciar sesión' }, { status: 500 });
   }
 }
